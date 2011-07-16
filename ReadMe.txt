@@ -18,9 +18,9 @@ You should be able to continue from this project to that step for the most part 
 
 
 Why did I do this?  
-	1. I have three games already at CheeseZombieGames.com and wanted to start learning some 3D.  
-	2. I didnt find the 3D Phone samples in the education section of AppHub all that entertaining.
-	3. I've used a ton of code from MS in the past on my projects and I thought it was about time to give something back.
+  1. I have three 2D games already at CheeseZombieGames.com and wanted to start learning some 3D.  
+  2. I didnt find the 3D Phone samples in the education section of AppHub all that entertaining.
+  3. I've used a ton of code from MS in the past on my projects and I thought it was about time to give something back.
 
 
 Enjoy, do with this what you want.  I hope to add Frustrum culling here shortly.
