@@ -29,6 +29,7 @@ namespace FuelCell
         FuelCell[] fuelCells;
         Barrier[] barriers;
         GameObject boundingSphere;
+        FrameRateCounter frameRate;
         private Texture2D thumbstick;
         #endregion
 
@@ -57,6 +58,7 @@ namespace FuelCell
             gameCamera = new Camera();
             ground = new GameObject();            
             boundingSphere = new GameObject();
+            frameRate = new FrameRateCounter(this, new Vector2(0, 0), Color.Wheat, Color.Wheat); 
 
             base.Initialize();
         }
@@ -77,7 +79,7 @@ namespace FuelCell
             thumbstick = Content.Load<Texture2D>("Textures/thumbstick");
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
-
+            frameRate.LoadContent(spriteBatch);
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
             for (int index = 0; index < fuelCells.Length; index++)
@@ -114,6 +116,8 @@ namespace FuelCell
             //Initialize fuel carrier
             fuelCarrier = new FuelCarrier();
             fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+
+                      
         }
 
         /// <summary>
@@ -123,6 +127,7 @@ namespace FuelCell
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            frameRate.UnloadContent();
         }
 
         #endregion
@@ -137,7 +142,7 @@ namespace FuelCell
         protected override void Update(GameTime gameTime)
         {
             VirtualThumbsticks.Update();
-
+            frameRate.Update(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -163,7 +168,10 @@ namespace FuelCell
         protected override void Draw(GameTime gameTime)
         {
             // TODO: Add your drawing code here
-            graphics.GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
             DrawTerrain(ground.Model);
 
@@ -205,6 +213,8 @@ namespace FuelCell
                     Color.Blue);
             }
 
+            frameRate.Draw(gameTime);
+
             spriteBatch.End();
 
 
@@ -224,7 +234,11 @@ namespace FuelCell
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
+                    effect.PreferPerPixelLighting = false;
+                    effect.LightingEnabled = true;
+                    effect.DirectionalLight0.Enabled = true;
+                    effect.DirectionalLight1.Enabled = false;
+                    effect.DirectionalLight2.Enabled = false;
                     effect.World = Matrix.Identity;
 
                     // Use the matrices provided by the game camera

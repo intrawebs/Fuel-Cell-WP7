@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>pyramid10uRFrame</Name>
     <Identity>
-      <SourceFilename>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCellContent\Models\pyramid10uR.x</SourceFilename>
+      <SourceFilename>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCellThumbsticks\FuelCell\FuelCellContent\Models\pyramid10uR.x</SourceFilename>
       <SourceTool>XImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
@@ -31,7 +31,7 @@
   <Resources>
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Identity>
-        <SourceFilename>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCellContent\Models\pyramid10uR.x</SourceFilename>
+        <SourceFilename>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCellThumbsticks\FuelCell\FuelCellContent\Models\pyramid10uR.x</SourceFilename>
         <SourceTool>XImporter</SourceTool>
       </Identity>
       <OpaqueData>

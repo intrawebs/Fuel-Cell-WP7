@@ -92,6 +92,7 @@
     <Compile Include="GameObjects\FuelCell.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="Misc\Camera.cs" />
+    <Compile Include="Misc\FramerateCounter.cs" />
     <Compile Include="Misc\VirtualThumbsticks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\AppManifest.xml">
@@ -107,7 +108,6 @@
     <Content Include="Background.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>
-    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FuelCellContent\FuelCellContent.contentproj">

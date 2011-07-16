@@ -47,7 +47,11 @@ namespace FuelCell
                     effect.View = view;
                     effect.Projection = projection;
                     effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
+                    effect.PreferPerPixelLighting = false;
+                    effect.LightingEnabled = true;
+                    effect.DirectionalLight0.Enabled = true;
+                    effect.DirectionalLight1.Enabled = false;
+                    effect.DirectionalLight2.Enabled = false;
                 }
                 mesh.Draw();
             }

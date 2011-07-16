@@ -42,5 +42,8 @@ namespace FuelCell
         //If you set this to 1 you will be in a state of constant turning
         //the smaller this is the more sensitive turning will be
         public const float TurnAmountGive = .3f;
+
+        //Draw Order
+        public const int DrawOrderHUD = 50;
     }
 }
