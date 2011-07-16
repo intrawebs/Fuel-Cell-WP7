@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelCell", "FuelCell\FuelCell\FuelCell.csproj", "{18C0929E-0A84-43C4-B398-9D77BCDAFB47}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "FuelCellContent", "FuelCell\FuelCellContent\FuelCellContent.contentproj", "{147E01C8-CBD8-473E-B66B-7742DE33AD40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Windows Phone = Debug|Windows Phone
+		Release|Windows Phone = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Debug|Windows Phone.Deploy.0 = Debug|Windows Phone
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Release|Windows Phone.Build.0 = Release|Windows Phone
+		{18C0929E-0A84-43C4-B398-9D77BCDAFB47}.Release|Windows Phone.Deploy.0 = Release|Windows Phone
+		{147E01C8-CBD8-473E-B66B-7742DE33AD40}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
+		{147E01C8-CBD8-473E-B66B-7742DE33AD40}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

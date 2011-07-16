@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline" xmlns:Framework="Microsoft.Xna.Framework" xmlns:Processors="Microsoft.Xna.Framework.Content.Pipeline.Processors">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Models\cube10uR.x</Source>
+      <Name>Models\cube10uR</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Parameters>
+        <Data Key="Scale">0.3</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\cube10uR.xnb</Output>
+      <Time>2011-07-15T11:05:14.3383311-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\cube10uR_0.xml</Key>
+        <Value>2011-07-15T15:41:59.7891086-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierBlue_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\cylinder10uR.x</Source>
+      <Name>Models\cylinder10uR</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Parameters>
+        <Data Key="Scale">0.3</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\cylinder10uR.xnb</Output>
+      <Time>2011-07-15T11:05:14.3403312-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\cylinder10uR_0.xml</Key>
+        <Value>2011-07-15T15:42:00.7071611-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierPurple_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\fuelcarrier.x</Source>
+      <Name>Models\fuelcarrier</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Parameters>
+        <Data Key="Scale">0.1</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\fuelcarrier.xnb</Output>
+      <Time>2011-07-15T11:05:14.3513319-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\fuelcarrier_0.xml</Key>
+        <Value>2011-07-15T15:42:01.3211962-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\carriertextures_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\fuelcell.x</Source>
+      <Name>Models\fuelcell</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Parameters>
+        <Data Key="Scale">0.03</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\fuelcell.xnb</Output>
+      <Time>2011-07-15T11:05:14.3553321-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\fuelcell_0.xml</Key>
+        <Value>2011-07-15T15:42:01.9612328-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\fuelcell_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\ground.x</Source>
+      <Name>Models\ground</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\ground.xnb</Output>
+      <Time>2011-07-15T11:05:14.3593323-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\ground_0.xml</Key>
+        <Value>2011-07-15T15:42:02.5962692-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\ground_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\pyramid10uR.x</Source>
+      <Name>Models\pyramid10uR</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Parameters>
+        <Data Key="Scale">0.3</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\pyramid10uR.xnb</Output>
+      <Time>2011-07-15T11:05:14.3603324-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\pyramid10uR_0.xml</Key>
+        <Value>2011-07-15T15:42:03.205304-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierRed_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\sphere1uR.x</Source>
+      <Name>Models\sphere1uR</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\sphere1uR.xnb</Output>
+      <Time>2011-07-15T13:46:35.9250862-07:00</Time>
+      <Dependency>
+        <Key>obj\Windows Phone\Debug\Models\sphere1uR_0.xml</Key>
+        <Value>2011-07-15T15:42:03.8053383-07:00</Value>
+      </Dependency>
+      <Request>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\White_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Textures\thumbstick.png</Source>
+      <Name>Textures\thumbstick</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Textures\thumbstick.xnb</Output>
+      <Time>2011-07-15T12:31:50.6235416-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\cube10uR.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\cube10uR_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3383311-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\BarrierBlue.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierBlue_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.3293306-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\cylinder10uR.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\cylinder10uR_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3403312-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\BarrierPurple.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierPurple_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.3323308-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\fuelcarrier.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\fuelcarrier_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3513319-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\carriertextures.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\carriertextures_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.336331-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\fuelcell.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\fuelcell_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3553321-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\fuelcell.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\fuelcell_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.353332-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\ground.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\ground_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3593323-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\ground.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\ground_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.3573322-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\pyramid10uR.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\pyramid10uR_0.xml</Output>
+      <Time>2011-07-15T11:05:14.3603324-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\BarrierRed.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\BarrierRed_0.xnb</Output>
+      <Time>2011-07-15T11:05:14.3343309-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\sphere1uR.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Windows Phone\Debug\Models\sphere1uR_0.xml</Output>
+      <Time>2011-07-15T13:46:35.9250862-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\White.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\Models\White_0.xnb</Output>
+      <Time>2011-07-15T13:46:35.9270863-07:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>WindowsPhone</TargetPlatform>
+      <TargetProfile>Reach</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCellContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCellContent\obj\Windows Phone\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\milesm\Documents\Projects\Win7Mobile\Projects\FuelCell\FuelCell\FuelCell\bin\Windows Phone\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2010-08-23T12:41:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2010-09-16T10:19:00.2041716-07:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
