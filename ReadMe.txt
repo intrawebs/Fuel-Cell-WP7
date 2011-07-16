@@ -9,13 +9,11 @@ http://create.msdn.com/en-US/sample/touchthumbsticks
 With the integrated thumbsticks you can now control your Fuel Carrier using XNA's Touch Collection.
 Notice a touch on the left side is for steering, a touch on the right could be used for FPS camera view or shooting/aiming in 3rd person.
 
-This codebase is by no means a good example of how to write clean and fast running code, it's mearly a starter project for
-doing something in 3D.
+This codebase is by no means a good example of how to write clean and fast running code, it's mearly a starter project for doing something in 3D.
 
 I did however tidy things up slightly from the MS Fuel Cell project (I actually built it from following steps vs. using the finished project)
-I advise of course to add your own polish using the last step MS provides and or a framework for screens/state that you may have already built.
-You should be able to continue from this project to that step for the most part taking into consideration some of the changes I've made to how
-things are structured in /GameObjects
+I advise you to add your own polish using the last step MS provides and or a framework for screens/state that you may have already built.
+You should be able to continue from this project to that step for the most part taking into consideration some of the changes I've made to how things are structured in /GameObjects
 
 
 
@@ -26,5 +24,4 @@ Why did I do this?
 
 
 Enjoy, do with this what you want.  I hope to add Frustrum culling here shortly.
-
 Marc
