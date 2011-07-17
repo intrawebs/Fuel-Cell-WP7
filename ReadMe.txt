@@ -1,4 +1,22 @@
-﻿This continues from  step 6 in the Fuel Cell example "FuelCell: "Ships" Passing in the Night"
+﻿******* VERSION HISTORY *********
+
+V 1.0 commitID 45fe4b64d6111699191a
+a. Initial check in with some fixes, this version matches up exactly with what the "Readme Contents" below speak about
+
+V 1.1 this commit you are reading now
+a. The fuel carrier now shoots (does Billboarding with SpriteBatch) via input from right thumbstick
+b. Re-Architected the code base a ton, using similar engine naming conentions that Epic Games did with Unreal Tournament.
+c. The code base no longer resembles what I detail in the "Readme Contents" below
+d. Going to keep running with this, see how it goes, need to improve management of particles/projectiles
+
+
+
+******* README CONTENTS *********
+
+A reminder, this is by no means shows 100% ideal use of .NET and programming coding practices, its intended to demonstrate doing some 3D stuff with XNA and WP7
+All of the following is relative to commitID 45fe4b64d6111699191a when I started this...
+
+This continues from  step 6 in the Fuel Cell example "FuelCell: "Ships" Passing in the Night"
 http://msdn.microsoft.com/en-us/library/dd254739.aspx
 
 Whats added is support for WP7.  The Fuel Cell sample code linked above was built for XNA 4, but not WP7.
@@ -14,8 +32,6 @@ This codebase is by no means a good example of how to write clean and fast runni
 I did however tidy things up slightly from the MS Fuel Cell project (I actually built it from following steps vs. using the finished project)
 I advise you to add your own polish using the last step MS provides and or a framework for screens/state that you may have already built.
 You should be able to continue from this project to that step for the most part taking into consideration some of the changes I've made to how things are structured in /GameObjects
-
-
 
 Why did I do this?  
   1. I have three 2D games already at CheeseZombieGames.com and wanted to start learning some 3D.  

@@ -10,26 +10,28 @@ using Microsoft.Xna.Framework;
 
 namespace FuelCell
 {
-    class FuelCell : GameObject
+    class FuelCell : Pawn
     {
         public bool Retrieved { get; set; }
 
-        public FuelCell()
-            : base()
+        public FuelCell(string modelName, GameState state)
+            : base(modelName, state)
         {
             Retrieved = false;
         }
 
-        public void LoadContent(ContentManager content, string modelName)
+        public override void LoadContent()
         {
-            Model = content.Load<Model>(modelName);
+            base.LoadContent();
             BoundingSphere = CalculateBoundingSphere();
             Position = Vector3.Down;
             ScaleBoundingSphere(GameConstants.FuelCellBoundingSphereFactor);
         }
 
-        public void Draw(Matrix view, Matrix projection)
+        public override void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
+            base.Draw(gameTime, view, projection);
+
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
@@ -58,10 +60,16 @@ namespace FuelCell
             }
         }
 
-        internal void Update(BoundingSphere vehicleBoundingSphere)
+        public override void Update(GameTime gameTime)
         {
-            if (vehicleBoundingSphere.Intersects(this.BoundingSphere))
-                this.Retrieved = true;
+            base.Update(gameTime);
+
+            if (!Retrieved)
+            {
+                if (GameState.Avatar.BoundingSphere.Intersects(BoundingSphere))
+                    Retrieved = true;
+            }
         }
+
     }
 }

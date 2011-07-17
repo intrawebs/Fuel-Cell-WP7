@@ -6,6 +6,8 @@ Content\Models\ground.xnb
 Content\Models\pyramid10uR.xnb
 Content\Models\sphere1uR.xnb
 Content\Textures\thumbstick.xnb
+Content\Textures\bullet.xnb
+Content\Fonts\SmallText.xnb
 Content\Models\BarrierBlue_0.xnb
 Content\Models\BarrierPurple_0.xnb
 Content\Models\carriertextures_0.xnb
@@ -13,4 +15,3 @@ Content\Models\fuelcell_0.xnb
 Content\Models\ground_0.xnb
 Content\Models\BarrierRed_0.xnb
 Content\Models\White_0.xnb
-Content\Fonts\SmallText.xnb

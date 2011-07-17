@@ -11,34 +11,43 @@ using Microsoft.Xna.Framework.Input;
 
 namespace FuelCell
 {
-    class FuelCarrier : GameObject
+    class FuelCarrier : Pawn
     {
+        //TO DO: player input is a bit to wired into this class, however, it's the only Pawn right now where that can be true
+        //so, if we add any other player controllable pawns lets remove the input stuff?
         #region Fields
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
+        public Vector3 Speed { get; set; }
+        public MountedGun PrimaryCannon { get; set; }
+        double lastWeaponFire = 0;
         #endregion
 
-        public FuelCarrier()
-            : base()
+        public FuelCarrier(string modelName, GameState state)
+            : base(modelName, state)
         {
             ForwardDirection = 0.0f;
             MaxRange = GameConstants.MaxRange;
+            PrimaryCannon = new MountedGun(state);
         }
 
-        public void LoadContent(ContentManager content, string modelName)
+        public override void LoadContent()
         {
-            Model = content.Load<Model>(modelName);
+            base.LoadContent();
             BoundingSphere = CalculateBoundingSphere();
             ScaleBoundingSphere(GameConstants.FuelCarrierBoundingSphereFactor);
         }
 
-        public void Draw(Matrix view, Matrix projection)
+        public override void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
+            base.Draw(gameTime, view, projection);
+
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix worldMatrix = Matrix.Identity;
             Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            Rotation = Quaternion.CreateFromRotationMatrix(rotationYMatrix);
 
             worldMatrix = rotationYMatrix * translateMatrix;
 
@@ -46,8 +55,7 @@ namespace FuelCell
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.World =
-                        worldMatrix * transforms[mesh.ParentBone.Index]; ;
+                    effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;
 
@@ -59,17 +67,28 @@ namespace FuelCell
                     effect.DirectionalLight2.Enabled = false;
                 }
                 mesh.Draw();
-            }
+            }         
         }
 
-        public void Update(Barrier[] barriers)
+
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            ManageMovement();
+
+            ManageWeapons(gameTime);
+        }
+
+        private void ManageMovement()
         {
             Vector3 futurePosition = Position;
             float turnAmount = 0;
 
             Vector3 movement = Vector3.Zero;
             if (VirtualThumbsticks.LeftThumbstick.Length() > .2f)
-			{
+            {
                 //Rotation = -(float)Math.Atan2(
                 //    -VirtualThumbsticks.LeftThumbstick.Y, 
                 //    VirtualThumbsticks.LeftThumbstick.X);
@@ -84,19 +103,19 @@ namespace FuelCell
                     turnAmount = -1;
                 else if (VirtualThumbsticks.LeftThumbstick.X < -GameConstants.TurnAmountGive)
                     turnAmount = 1;
-                else 
+                else
                     turnAmount = 0;
-			}
+            }
 
             ForwardDirection += turnAmount * GameConstants.TurnSpeed;
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
 
-            Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity;
-            futurePosition = Position + speed;
+            Speed = Vector3.Transform(movement, orientationMatrix);
+            Speed *= GameConstants.Velocity;
+            futurePosition = Position + Speed;
 
-            if (ValidateMovement(futurePosition, barriers))
+            if (ValidateMovement(futurePosition))
             {
                 Position = futurePosition;
                 BoundingSphere updatedSphere;
@@ -107,7 +126,26 @@ namespace FuelCell
             }
         }
 
-        private bool ValidateMovement(Vector3 futurePosition, Barrier[] barriers)
+        private void ManageWeapons(GameTime gameTime)
+        {
+            if (VirtualThumbsticks.RightThumbstick.Length() > .2f)
+            {
+                //can we shoot? dont want to be shooting too fast
+                double currentTime = gameTime.TotalGameTime.TotalMilliseconds;
+                if (currentTime - lastWeaponFire > 100)
+                {
+                    PrimaryCannon.Shoot(Position, Rotation);
+                    lastWeaponFire = currentTime;
+                }
+            }
+        }
+
+        Texture2D bulletTexture;
+        List<Fireball> bulletList = new List<Fireball>(); 
+        
+        BasicEffect basicEffect;
+
+        private bool ValidateMovement(Vector3 futurePosition)
         {
             BoundingSphere futureBoundingSphere = BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
@@ -118,18 +156,18 @@ namespace FuelCell
                 return false;
 
             //Don't allow driving through a barrier
-            if (CheckForBarrierCollision(futureBoundingSphere, barriers))
+            if (CheckForBarrierCollision(futureBoundingSphere))
                 return false;
 
             return true;
         }
 
-        private bool CheckForBarrierCollision(BoundingSphere vehicleBoundingSphere, Barrier[] barriers)
+        private bool CheckForBarrierCollision(BoundingSphere vehicleBoundingSphere)
         {
-            for (int curBarrier = 0; curBarrier < barriers.Length; curBarrier++)
+            for (int curBarrier = 0; curBarrier < GameState.Barriers.Length; curBarrier++)
             {
                 if (vehicleBoundingSphere.Intersects(
-                    barriers[curBarrier].BoundingSphere))
+                    GameState.Barriers[curBarrier].BoundingSphere))
                     return true;
             }
             return false;

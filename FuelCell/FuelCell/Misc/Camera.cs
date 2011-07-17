@@ -15,6 +15,7 @@ namespace FuelCell
         public Vector3 TargetOffset { get; set; }
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
+        public Vector3 Position { get; set; }
         #endregion
 
         public Camera()
@@ -30,12 +31,12 @@ namespace FuelCell
             Matrix rotationMatrix = Matrix.CreateRotationY(avatarYaw);
             Vector3 transformedheadOffset = Vector3.Transform(AvatarHeadOffset, rotationMatrix);
             Vector3 transformedReference = Vector3.Transform(TargetOffset, rotationMatrix);
-            Vector3 cameraPosition = position + transformedheadOffset;
+            Position = position + transformedheadOffset;
             Vector3 cameraTarget = position + transformedReference;
 
             //Calculate the camera's view and projection 
             //matrices based on current values.
-            ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
+            ViewMatrix = Matrix.CreateLookAt(Position, cameraTarget, Vector3.Up);
             ProjectionMatrix =
                 Matrix.CreatePerspectiveFieldOfView(
                     MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,

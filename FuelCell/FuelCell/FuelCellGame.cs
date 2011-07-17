@@ -22,15 +22,16 @@ namespace FuelCell
         #region Fields
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameObject ground;
+        Terrain ground;
         Camera gameCamera;
         Random random;
-        FuelCarrier fuelCarrier;
-        FuelCell[] fuelCells;
-        Barrier[] barriers;
-        GameObject boundingSphere;
+        Pawn boundingSphere;
         FrameRateCounter frameRate;
         private Texture2D thumbstick;
+        SpriteFont spriteFont;
+        GameState gameState;
+        Texture2D fireballTexture;
+        BasicEffect fireballEffect;
         #endregion
 
         #region Init
@@ -56,9 +57,8 @@ namespace FuelCell
         {
             TouchPanel.EnabledGestures = GestureType.Tap;
             gameCamera = new Camera();
-            ground = new GameObject();            
-            boundingSphere = new GameObject();
-            frameRate = new FrameRateCounter(this, new Vector2(0, 0), Color.Wheat, Color.Wheat); 
+            frameRate = new FrameRateCounter(this, new Vector2(0, 0), Color.Wheat, Color.Wheat);
+            gameState = new GameState(Content, GraphicsDevice);
 
             base.Initialize();
         }
@@ -73,27 +73,26 @@ namespace FuelCell
         /// </summary>
         protected override void LoadContent()
         {
+            //Init some misc stuff
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Misc textures, the bounding sphere is the wireframe mesh you see that is used for collisions
+            spriteFont = Content.Load<SpriteFont>("Fonts/SmallText");
             thumbstick = Content.Load<Texture2D>("Textures/thumbstick");
-            ground.Model = Content.Load<Model>("Models/ground");
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            ground = new Terrain("Models/ground", gameState);
+            boundingSphere = new Pawn("Models/sphere1uR", gameState);
             frameRate.LoadContent(spriteBatch);
-            //Initialize fuel cells
-            fuelCells = new FuelCell[GameConstants.NumFuelCells];
-            for (int index = 0; index < fuelCells.Length; index++)
-            {
-                fuelCells[index] = new FuelCell();
-                fuelCells[index].LoadContent(Content, "Models/fuelcell");
-            }
 
-            //Initialize barriers
-            barriers = new Barrier[GameConstants.NumBarriers];
+            //Init fuel cells
+
+            gameState.FuelCells = new FuelCell[GameConstants.NumFuelCells];
+            for (int index = 0; index < gameState.FuelCells.Length; index++)
+                gameState.FuelCells[index] = new FuelCell("Models/fuelcell", gameState);
+
+            //Init barriers
+            gameState.Barriers = new Barrier[GameConstants.NumBarriers];
             int randomBarrier = random.Next(3);
             string barrierName = null;
 
-            for (int index = 0; index < barriers.Length; index++)
+            for (int index = 0; index < gameState.Barriers.Length; index++)
             {
                 switch (randomBarrier)
                 {
@@ -107,17 +106,25 @@ namespace FuelCell
                         barrierName = "Models/pyramid10uR";
                         break;
                 }
-                barriers[index] = new Barrier();
-                barriers[index].LoadContent(Content, barrierName);
+                gameState.Barriers[index] = new Barrier(barrierName, gameState);
                 randomBarrier = random.Next(3);
             }
             PlaceFuelCellsAndBarriers();
 
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+            //Init fuel carrier
+            gameState.Avatar = new FuelCarrier("Models/fuelcarrier", gameState);
 
-                      
+            //bullet
+            fireballTexture = Content.Load<Texture2D>("Textures/bullet");
+
+            fireballEffect = new BasicEffect(GraphicsDevice)
+            {
+                TextureEnabled = true,
+                VertexColorEnabled = true,
+            };
+
+            gameState.WireFrameModel = boundingSphere;
+            gameState.Particles = new List<Particle>();
         }
 
         /// <summary>
@@ -143,22 +150,41 @@ namespace FuelCell
         {
             VirtualThumbsticks.Update();
             frameRate.Update(gameTime);
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            fuelCarrier.Update(barriers);
-            float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            gameCamera.Update(fuelCarrier.ForwardDirection, fuelCarrier.Position, aspectRatio);
+            foreach (FuelCell cell in gameState.FuelCells)
+                cell.Update(gameTime);
 
-            foreach (FuelCell fuelCell in fuelCells)
-                fuelCell.Update(fuelCarrier.BoundingSphere);
+            gameState.Avatar.Update(gameTime);
+            float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
+            gameCamera.Update(gameState.Avatar.ForwardDirection, gameState.Avatar.Position, aspectRatio);
+
+            //Since we dont have a real particle engine...
+            foreach (Particle sprite in gameState.Particles)
+            {
+                sprite.Update(gameTime);
+
+                //Check barriers, ideally these would be generic types instead and would have methods returing true/false for collision
+                //these in the future would have events/recievers etc to let downstream objects know a collision was made
+                foreach (Barrier barrier in gameState.Barriers)
+                {
+                    if (barrier.BoundingSphere.Intersects(new BoundingBox(sprite.Position, sprite.Position)))
+                        sprite.IsMarkedRemoved = true;
+                }
+            }
+            for (int x = 0; x < gameState.Particles.Count; x++)
+                if (gameState.Particles[x].IsMarkedRemoved)
+                    gameState.Particles.Remove(gameState.Particles[x]);
+
 
             base.Update(gameTime);
         }
 
         #endregion
-
+        
         #region Draw
 
         /// <summary>
@@ -173,26 +199,24 @@ namespace FuelCell
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            DrawTerrain(ground.Model);
+            //For better perf, draw whats closest to the camera first, XNA likes that doesnt spend time drawing pixels covered by something else
+            //however, they are still sent to the GPU for processing, so futuer culling can help if perf gets bad
+            gameState.Avatar.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
-            foreach (FuelCell fuelCell in fuelCells)
-            {
+            foreach (Barrier barrier in gameState.Barriers)
+                barrier.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+
+            foreach (FuelCell fuelCell in gameState.FuelCells)
                 if (!fuelCell.Retrieved)
-                {
-                    fuelCell.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    DrawBoundingSphere(fuelCell);
-                }
-            }
-            foreach (Barrier barrier in barriers)
-            {
-                barrier.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                DrawBoundingSphere(barrier);
-            }
+                    fuelCell.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);            
 
-            fuelCarrier.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            DrawBoundingSphere(fuelCarrier);
+            ground.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
-            // Do 2D textures etc
+            DrawParticles();
+
+
+
+            // Draw 2D HUD
             spriteBatch.Begin();
 
             // if the user is touching the screen and the thumbsticks have positions,
@@ -218,6 +242,7 @@ namespace FuelCell
             spriteBatch.End();
 
 
+
             //reset the render back to something usable for 3d
             //see http://blogs.msdn.com/b/shawnhar/archive/2010/06/18/spritebatch-and-renderstates-in-xna-game-studio-4-0.aspx
             GraphicsDevice.BlendState = BlendState.Opaque;
@@ -227,39 +252,73 @@ namespace FuelCell
             base.Draw(gameTime);
         }
 
-        private void DrawTerrain(Model model)
+        private void DrawParticles()
         {
-            foreach (ModelMesh mesh in model.Meshes)
+            if (gameState.Particles.Count > 0)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                VertexPositionTexture[] bulletVertices = new VertexPositionTexture[gameState.Particles.Count * 6];
+                int i = 0;
+                foreach (Fireball currentBullet in gameState.Particles)
                 {
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = false;
-                    effect.LightingEnabled = true;
-                    effect.DirectionalLight0.Enabled = true;
-                    effect.DirectionalLight1.Enabled = false;
-                    effect.DirectionalLight2.Enabled = false;
-                    effect.World = Matrix.Identity;
+                    Vector3 center = currentBullet.Position;
 
-                    // Use the matrices provided by the game camera
-                    effect.View = gameCamera.ViewMatrix;
-                    effect.Projection = gameCamera.ProjectionMatrix;
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 0));
+
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 1));
+                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
                 }
-                mesh.Draw();
-            }
-        }
 
-        private void DrawBoundingSphere(GameObject gameObject)
-        {
-            if (GameConstants.DrawCollisionSpheres)
-            {
-                RasterizerState rsC = new RasterizerState();
-                rsC.FillMode = FillMode.WireFrame;
-                GraphicsDevice.RasterizerState = rsC;
-                gameObject.DrawBoundingSphere(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, boundingSphere);
-                rsC = new RasterizerState();
-                rsC.FillMode = FillMode.Solid;
-                GraphicsDevice.RasterizerState = rsC;
+                //Billboarding in XNA 4...text and textures
+                //http://blogs.msdn.com/b/shawnhar/archive/2011/01/12/spritebatch-billboards-in-a-3d-world.aspx
+
+                #region Draw Text Sprites
+                //Matrix invertY = Matrix.CreateScale(1, -1, 1);
+                //basicEffect.World = invertY;
+                //basicEffect.View = Matrix.Identity;
+                //basicEffect.Projection = gameCamera.ProjectionMatrix;
+
+                //spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
+
+                //foreach (Bullet currentBullet in bulletList)
+                //{
+                //    Vector3 textPosition = currentBullet.position;
+
+                //    Vector3 viewSpaceTextPosition = Vector3.Transform(textPosition, gameCamera.ViewMatrix * invertY);
+
+                //    const string message = "o";
+                //    Vector2 textOrigin = spriteFont.MeasureString(message) / 2;
+                //    const float textSize = 0.25f;
+
+                //    spriteBatch.DrawString(spriteFont, message, new Vector2(viewSpaceTextPosition.X, viewSpaceTextPosition.Y), Color.White, 0, textOrigin, textSize, 0, viewSpaceTextPosition.Z);
+                //}
+                #endregion
+
+                #region Draw Texture Sprites
+
+                Matrix invertY = Matrix.CreateScale(1, -1, 1);
+                fireballEffect.World = invertY;
+                fireballEffect.View = Matrix.Identity;
+                fireballEffect.Projection = gameCamera.ProjectionMatrix;
+                fireballEffect.Texture = fireballTexture;
+                fireballEffect.TextureEnabled = true;
+
+                spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, fireballEffect);
+
+                foreach (Fireball currentBullet in gameState.Particles)
+                {
+                    const float size = 0.03f;
+                    Vector3 textPosition = currentBullet.Position;
+                    Vector3 viewSpaceTextPosition = Vector3.Transform(textPosition, gameCamera.ViewMatrix * invertY);
+                    Vector2 locationOffset = new Vector2(viewSpaceTextPosition.X - (fireballTexture.Width / 2) * size, viewSpaceTextPosition.Y - fireballTexture.Height * size);
+
+                    spriteBatch.Draw(fireballTexture, locationOffset, null, Color.White, 0, Vector2.Zero, size, 0, viewSpaceTextPosition.Z);
+                }
+                spriteBatch.End();
+
+                #endregion
             }
         }
 
@@ -274,7 +333,7 @@ namespace FuelCell
             Vector3 tempCenter;
 
             //place fuel cells
-            foreach (FuelCell cell in fuelCells)
+            foreach (FuelCell cell in gameState.FuelCells)
             {
                 cell.Position = GenerateRandomPosition(min, max);
                 tempCenter = cell.BoundingSphere.Center;
@@ -285,7 +344,7 @@ namespace FuelCell
             }
 
             //place barriers
-            foreach (Barrier barrier in barriers)
+            foreach (Barrier barrier in gameState.Barriers)
             {
                 barrier.Position = GenerateRandomPosition(min, max);
                 tempCenter = barrier.BoundingSphere.Center;
@@ -314,7 +373,7 @@ namespace FuelCell
 
         private bool IsOccupied(int xValue, int zValue)
         {
-            foreach (GameObject currentObj in fuelCells)
+            foreach (Pawn currentObj in gameState.FuelCells)
             {
                 if (((int)(MathHelper.Distance(
                     xValue, currentObj.Position.X)) < 15) &&
@@ -323,7 +382,7 @@ namespace FuelCell
                     return true;
             }
 
-            foreach (GameObject currentObj in barriers)
+            foreach (Pawn currentObj in gameState.Barriers)
             {
                 if (((int)(MathHelper.Distance(
                     xValue, currentObj.Position.X)) < 15) &&

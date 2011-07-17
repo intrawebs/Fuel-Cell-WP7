@@ -63,6 +63,7 @@ namespace FuelCell
                 // scaled by the maximum thumbstick distance
                 Vector2 l = (leftPosition - LeftThumbstickCenter.Value) / maxThumbstickDistance;
 
+
                 // if the length is more than 1, normalize the vector
                 if (l.LengthSquared() > 1f)
                     l.Normalize();

@@ -11,39 +11,72 @@ using Microsoft.Xna.Framework.Input;
 
 namespace FuelCell
 {
-    class GameObject
+    class Pawn : Actor
     {
         #region Fields
         public Model Model { get; set; }
-        public Vector3 Position { get; set; }
-        public bool IsActive { get; set; }
         public BoundingSphere BoundingSphere { get; set; }
+        public string ModelName { get; set; }
         #endregion
 
-        public GameObject()
+        public Pawn(string modelName, GameState state)
+            : base(state)
         {
             Model = null;
             Position = Vector3.Zero;
             IsActive = false;
+            ModelName = modelName;
+            LoadContent();
         }
 
-        internal void DrawBoundingSphere(Matrix view, Matrix projection, GameObject boundingSphereModel)
-        {
-            Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
-            Matrix translateMatrix = Matrix.CreateTranslation(BoundingSphere.Center);
-            Matrix worldMatrix = scaleMatrix * translateMatrix;
+        #region Load
 
-            foreach (ModelMesh mesh in boundingSphereModel.Model.Meshes)
+        public override void LoadContent()
+        {
+            base.LoadContent();
+            Model = GameState.Content.Load<Model>(ModelName);
+        }
+
+        #endregion
+
+        #region Draw
+
+        public override void Draw(GameTime gameTime, Matrix view, Matrix projection)
+        {
+            base.Draw(gameTime, view, projection);
+            DrawWireFrame(view, projection);
+        }
+
+        private void DrawWireFrame(Matrix view, Matrix projection)
+        {
+            if (GameConstants.DrawCollisionSpheres)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                RasterizerState rsC = new RasterizerState();
+                rsC.FillMode = FillMode.WireFrame;
+                GameState.GraphicsDevice.RasterizerState = rsC;
+
+                Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
+                Matrix translateMatrix = Matrix.CreateTranslation(BoundingSphere.Center);
+                Matrix worldMatrix = scaleMatrix * translateMatrix;
+
+                foreach (ModelMesh mesh in GameState.WireFrameModel.Model.Meshes)
                 {
-                    effect.World = worldMatrix;
-                    effect.View = view;
-                    effect.Projection = projection;
+                    foreach (BasicEffect effect in mesh.Effects)
+                    {
+                        effect.World = worldMatrix;
+                        effect.View = view;
+                        effect.Projection = projection;
+                    }
+                    mesh.Draw();
                 }
-                mesh.Draw();
+
+                rsC = new RasterizerState();
+                rsC.FillMode = FillMode.Solid;
+                GameState.GraphicsDevice.RasterizerState = rsC;
             }
         }
+
+        #endregion
 
         protected void ScaleBoundingSphere(float scale)
         {
