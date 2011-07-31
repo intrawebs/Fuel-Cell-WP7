@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FuelCell
 {
-    class Particle : Actor
+    class Projectile : Actor
     {
-        public Particle(GameState state, Vector3 position, Quaternion rotation)
+        public Projectile(GameState state, Vector3 position, Quaternion rotation)
             : base(state)
         {
             Position = position;

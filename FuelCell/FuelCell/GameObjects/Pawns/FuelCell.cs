@@ -1,7 +1,7 @@
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
-#region Using Statements
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,9 +31,6 @@ namespace FuelCell
         public override void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
             base.Draw(gameTime, view, projection);
-
-            Matrix[] transforms = new Matrix[Model.Bones.Count];
-            Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
             Matrix worldMatrix = translateMatrix;
 
@@ -43,11 +40,9 @@ namespace FuelCell
                 {
                     foreach (BasicEffect effect in mesh.Effects)
                     {
-                        effect.World =
-                            worldMatrix * transforms[mesh.ParentBone.Index];
+                        effect.World = worldMatrix * BoneTransforms[mesh.ParentBone.Index];
                         effect.View = view;
                         effect.Projection = projection;
-
                         effect.EnableDefaultLighting();
                         effect.PreferPerPixelLighting = false;
                         effect.LightingEnabled = true;

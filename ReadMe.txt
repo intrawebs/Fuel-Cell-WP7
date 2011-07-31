@@ -1,13 +1,18 @@
 ﻿******* VERSION HISTORY *********
+v 1.2 this commit
+a. Each object now tracks the player and shots at the player in different ways
+b. Lots of refactoring of objects
 
-V 1.0 commitID e75b97aa2a1e0b418a1b
-a. Initial check in with some fixes, this version matches up exactly with what the "Readme Contents" below speak about
-
-V 1.1 this commit you are reading now
+V 1.1 commitID 699b20bb652ed31e92f4
 a. The fuel carrier now shoots (does Billboarding with SpriteBatch) via input from right thumbstick
 b. Re-Architected the code base a ton, using similar engine naming conentions that Epic Games did with Unreal Tournament.
 c. The code base no longer resembles what I detail in the "Readme Contents" below
 d. Going to keep running with this, see how it goes, need to improve management of particles/projectiles
+
+V 1.0 commitID e75b97aa2a1e0b418a1b
+a. Initial check in with some fixes, this version matches up exactly with what the "Readme Contents" below speak about
+
+
 
 
 

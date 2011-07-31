@@ -19,8 +19,7 @@ namespace FuelCell
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
         public Vector3 Speed { get; set; }
-        public MountedGun PrimaryCannon { get; set; }
-        double lastWeaponFire = 0;
+        public MountedGun PrimaryCannon { get; set; }        
         #endregion
 
         public FuelCarrier(string modelName, GameState state)
@@ -28,7 +27,7 @@ namespace FuelCell
         {
             ForwardDirection = 0.0f;
             MaxRange = GameConstants.MaxRange;
-            PrimaryCannon = new MountedGun(state);
+            PrimaryCannon = new MountedGun(state, 100);
         }
 
         public override void LoadContent()
@@ -41,9 +40,6 @@ namespace FuelCell
         public override void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
             base.Draw(gameTime, view, projection);
-
-            Matrix[] transforms = new Matrix[Model.Bones.Count];
-            Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix worldMatrix = Matrix.Identity;
             Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
@@ -55,7 +51,7 @@ namespace FuelCell
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.World = worldMatrix * BoneTransforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;
 
@@ -69,8 +65,6 @@ namespace FuelCell
                 mesh.Draw();
             }         
         }
-
-
 
         public override void Update(GameTime gameTime)
         {
@@ -131,19 +125,12 @@ namespace FuelCell
             if (VirtualThumbsticks.RightThumbstick.Length() > .2f)
             {
                 //can we shoot? dont want to be shooting too fast
-                double currentTime = gameTime.TotalGameTime.TotalMilliseconds;
-                if (currentTime - lastWeaponFire > 100)
+                if (PrimaryCannon.CanShoot(gameTime))
                 {
-                    PrimaryCannon.Shoot(Position, Rotation);
-                    lastWeaponFire = currentTime;
+                    PrimaryCannon.Shoot(Position, Rotation, this, gameTime);
                 }
             }
         }
-
-        Texture2D bulletTexture;
-        List<Fireball> bulletList = new List<Fireball>(); 
-        
-        BasicEffect basicEffect;
 
         private bool ValidateMovement(Vector3 futurePosition)
         {

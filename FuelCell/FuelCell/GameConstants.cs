@@ -27,7 +27,6 @@ namespace FuelCell
         public const int MaxRange = 98;
 
         //general
-        public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
@@ -45,5 +44,20 @@ namespace FuelCell
 
         //Draw Order
         public const int DrawOrderHUD = 50;
+
+        //particles
+        public const float FireballScale = 0.03f;
+
+        //Textures
+        public const string TxtThumbsticks = "Textures/thumbstick";
+        public const string TxtFireball = "Textures/bullet";
+        //Models
+        public const string MdlGround = "Models/ground";
+        public const string MdlSphere = "Models/sphere1uR";
+        public const string MdlAvatar = "Models/fuelcarrier";
+        public const string MdlFuelcell = "Models/fuelcell";
+        public const string MdlCube = "Models/cube10uR";
+        public const string MdlCylinder = "Models/cylinder10uR";
+        public const string MdlPryamid = "Models/pyramid10uR";
     }
 }

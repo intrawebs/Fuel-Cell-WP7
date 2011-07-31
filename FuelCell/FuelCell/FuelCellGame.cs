@@ -30,8 +30,6 @@ namespace FuelCell
         private Texture2D thumbstick;
         SpriteFont spriteFont;
         GameState gameState;
-        Texture2D fireballTexture;
-        BasicEffect fireballEffect;
         #endregion
 
         #region Init
@@ -39,10 +37,15 @@ namespace FuelCell
         public FuelCellGame()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 480;
+
             Content.RootDirectory = "Content";
 
             // Frame rate is 30 fps by default for Windows Phone.
             TargetElapsedTime = TimeSpan.FromTicks(333333);
+            graphics.IsFullScreen = true;
+            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
             random = new Random(DateTime.Now.Millisecond);
         }
@@ -76,55 +79,58 @@ namespace FuelCell
             //Init some misc stuff
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteFont = Content.Load<SpriteFont>("Fonts/SmallText");
-            thumbstick = Content.Load<Texture2D>("Textures/thumbstick");
-            ground = new Terrain("Models/ground", gameState);
-            boundingSphere = new Pawn("Models/sphere1uR", gameState);
+            thumbstick = Content.Load<Texture2D>(GameConstants.TxtThumbsticks);
+            ground = new Terrain(GameConstants.MdlGround, gameState);
+            boundingSphere = new Pawn(GameConstants.MdlSphere, gameState);
+            Fireball.Texture = Content.Load<Texture2D>(GameConstants.TxtFireball); 
             frameRate.LoadContent(spriteBatch);
 
-            //Init fuel cells
+            //quad = new Quad(Vector3.Zero, Vector3.Backward, Vector3.Up, 1, 1);
+            //quadTexture = Content.Load<Texture2D>("Textures/Glass");
+            //quadEffect = new BasicEffect(graphics.GraphicsDevice);
+            //quadEffect.EnableDefaultLighting();
 
+            //quadEffect.World = Matrix.Identity;
+            //quadEffect.View = gameCamera.ViewMatrix;
+            //quadEffect.Projection = gameCamera.ProjectionMatrix;
+            //quadEffect.TextureEnabled = true;
+            //quadEffect.Texture = quadTexture;
+
+            //myBoundingBox = new BoundingBox(new Vector3(0, 0, 0), new Vector3(8, 4, 15));
+
+            //Init fuel cells
             gameState.FuelCells = new FuelCell[GameConstants.NumFuelCells];
             for (int index = 0; index < gameState.FuelCells.Length; index++)
-                gameState.FuelCells[index] = new FuelCell("Models/fuelcell", gameState);
+                gameState.FuelCells[index] = new FuelCell(GameConstants.MdlFuelcell, gameState);
 
             //Init barriers
             gameState.Barriers = new Barrier[GameConstants.NumBarriers];
             int randomBarrier = random.Next(3);
-            string barrierName = null;
 
-            for (int index = 0; index < gameState.Barriers.Length; index++)
+            for (int index = 0; index < GameConstants.NumBarriers; index++)
             {
+                BarrierType type = BarrierType.Cube;
                 switch (randomBarrier)
                 {
                     case 0:
-                        barrierName = "Models/cube10uR";
+                        type = BarrierType.Cube;
                         break;
                     case 1:
-                        barrierName = "Models/cylinder10uR";
+                        type = BarrierType.Cylinder;
                         break;
                     case 2:
-                        barrierName = "Models/pyramid10uR";
+                        type = BarrierType.Pryamid;
                         break;
                 }
-                gameState.Barriers[index] = new Barrier(barrierName, gameState);
+                gameState.Barriers[index] = Barrier.BarrierFromType(type, gameState);
                 randomBarrier = random.Next(3);
             }
             PlaceFuelCellsAndBarriers();
 
             //Init fuel carrier
-            gameState.Avatar = new FuelCarrier("Models/fuelcarrier", gameState);
-
-            //bullet
-            fireballTexture = Content.Load<Texture2D>("Textures/bullet");
-
-            fireballEffect = new BasicEffect(GraphicsDevice)
-            {
-                TextureEnabled = true,
-                VertexColorEnabled = true,
-            };
-
+            gameState.Avatar = new FuelCarrier(GameConstants.MdlAvatar, gameState);
             gameState.WireFrameModel = boundingSphere;
-            gameState.Particles = new List<Particle>();
+            gameState.Projectiles = new List<Projectile>();
         }
 
         /// <summary>
@@ -158,12 +164,15 @@ namespace FuelCell
             foreach (FuelCell cell in gameState.FuelCells)
                 cell.Update(gameTime);
 
+            foreach (Barrier barrier in gameState.Barriers)
+                barrier.Update(gameTime);
+
             gameState.Avatar.Update(gameTime);
             float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             gameCamera.Update(gameState.Avatar.ForwardDirection, gameState.Avatar.Position, aspectRatio);
 
             //Since we dont have a real particle engine...
-            foreach (Particle sprite in gameState.Particles)
+            foreach (Fireball sprite in gameState.Projectiles)
             {
                 sprite.Update(gameTime);
 
@@ -171,13 +180,17 @@ namespace FuelCell
                 //these in the future would have events/recievers etc to let downstream objects know a collision was made
                 foreach (Barrier barrier in gameState.Barriers)
                 {
-                    if (barrier.BoundingSphere.Intersects(new BoundingBox(sprite.Position, sprite.Position)))
+                    if (sprite.ShotBy != barrier && barrier.BoundingSphere.Intersects(new BoundingBox(sprite.Position, sprite.Position)))
                         sprite.IsMarkedRemoved = true;
                 }
+
+                //remove them if they traveld too far
+                if (sprite.Position.Length() > GameConstants.MaxDistance*2)
+                    sprite.IsMarkedRemoved = true;
             }
-            for (int x = 0; x < gameState.Particles.Count; x++)
-                if (gameState.Particles[x].IsMarkedRemoved)
-                    gameState.Particles.Remove(gameState.Particles[x]);
+            for (int x = 0; x < gameState.Projectiles.Count; x++)
+                if (gameState.Projectiles[x].IsMarkedRemoved)
+                    gameState.Projectiles.Remove(gameState.Projectiles[x]);
 
 
             base.Update(gameTime);
@@ -210,9 +223,22 @@ namespace FuelCell
                 if (!fuelCell.Retrieved)
                     fuelCell.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);            
 
+            ////draw wall
+            //foreach (EffectPass pass in quadEffect.CurrentTechnique.Passes)
+            //{
+            //    pass.Apply();
+
+            //    GraphicsDevice.DrawUserIndexedPrimitives
+            //        <VertexPositionNormalTexture>(
+            //        PrimitiveType.TriangleList,
+            //        quad.Vertices, 0, 4,
+            //        quad.Indexes, 0, 2);
+            //}
+            //BoundingBoxRenderer.Render(myBoundingBox, GraphicsDevice, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, Color.SaddleBrown);
+
             ground.Draw(gameTime, gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
-            DrawParticles();
+            DrawProjectiles();
 
 
 
@@ -241,8 +267,6 @@ namespace FuelCell
 
             spriteBatch.End();
 
-
-
             //reset the render back to something usable for 3d
             //see http://blogs.msdn.com/b/shawnhar/archive/2010/06/18/spritebatch-and-renderstates-in-xna-game-studio-4-0.aspx
             GraphicsDevice.BlendState = BlendState.Opaque;
@@ -252,27 +276,28 @@ namespace FuelCell
             base.Draw(gameTime);
         }
 
-        private void DrawParticles()
+        private void DrawProjectiles()
         {
-            if (gameState.Particles.Count > 0)
+            if (gameState.Projectiles.Count > 0)
             {
-                VertexPositionTexture[] bulletVertices = new VertexPositionTexture[gameState.Particles.Count * 6];
+                VertexPositionTexture[] projectileVertices = new VertexPositionTexture[gameState.Projectiles.Count * 6];
                 int i = 0;
-                foreach (Fireball currentBullet in gameState.Particles)
+                foreach (Fireball fireball in gameState.Projectiles)
                 {
-                    Vector3 center = currentBullet.Position;
+                    Vector3 center = fireball.Position;
 
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 0));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 0));
 
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 1));
-                    bulletVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(1, 1));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 1));
+                    projectileVertices[i++] = new VertexPositionTexture(center, new Vector2(0, 0));
                 }
 
                 //Billboarding in XNA 4...text and textures
                 //http://blogs.msdn.com/b/shawnhar/archive/2011/01/12/spritebatch-billboards-in-a-3d-world.aspx
+                Fireball.DrawAll(gameState, spriteBatch, gameCamera);
 
                 #region Draw Text Sprites
                 //Matrix invertY = Matrix.CreateScale(1, -1, 1);
@@ -294,30 +319,6 @@ namespace FuelCell
 
                 //    spriteBatch.DrawString(spriteFont, message, new Vector2(viewSpaceTextPosition.X, viewSpaceTextPosition.Y), Color.White, 0, textOrigin, textSize, 0, viewSpaceTextPosition.Z);
                 //}
-                #endregion
-
-                #region Draw Texture Sprites
-
-                Matrix invertY = Matrix.CreateScale(1, -1, 1);
-                fireballEffect.World = invertY;
-                fireballEffect.View = Matrix.Identity;
-                fireballEffect.Projection = gameCamera.ProjectionMatrix;
-                fireballEffect.Texture = fireballTexture;
-                fireballEffect.TextureEnabled = true;
-
-                spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, fireballEffect);
-
-                foreach (Fireball currentBullet in gameState.Particles)
-                {
-                    const float size = 0.03f;
-                    Vector3 textPosition = currentBullet.Position;
-                    Vector3 viewSpaceTextPosition = Vector3.Transform(textPosition, gameCamera.ViewMatrix * invertY);
-                    Vector2 locationOffset = new Vector2(viewSpaceTextPosition.X - (fireballTexture.Width / 2) * size, viewSpaceTextPosition.Y - fireballTexture.Height * size);
-
-                    spriteBatch.Draw(fireballTexture, locationOffset, null, Color.White, 0, Vector2.Zero, size, 0, viewSpaceTextPosition.Z);
-                }
-                spriteBatch.End();
-
                 #endregion
             }
         }

@@ -17,6 +17,7 @@ namespace FuelCell
         public Model Model { get; set; }
         public BoundingSphere BoundingSphere { get; set; }
         public string ModelName { get; set; }
+        internal Matrix[] BoneTransforms { get; set; }
         #endregion
 
         public Pawn(string modelName, GameState state)
@@ -35,6 +36,9 @@ namespace FuelCell
         {
             base.LoadContent();
             Model = GameState.Content.Load<Model>(ModelName);
+
+            BoneTransforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
         }
 
         #endregion
